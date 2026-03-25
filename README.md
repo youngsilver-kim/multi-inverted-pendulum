@@ -140,4 +140,4 @@ python train/train_quintuple.py
 
 ## Author
 
-AI undergraduate student focusing on reinforcement learning and control systems.
+AI undergraduate student 
