@@ -90,7 +90,7 @@ In this project, PPO generally showed more reliable performance for multi-link c
 
 ### Simulation Result (3-link)
 
-![result](results/v1_triple/triple_pendulum_control.mp4)
+![result](results/v1_triple/output.gif)
 
 ---
 
