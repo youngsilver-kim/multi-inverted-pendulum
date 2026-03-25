@@ -1,0 +1,3 @@
+from .triple_env import TripleInvertedPendulumEnv
+from .quadruple_env import QuadrupleInvertedPendulumEnv
+from .quintuple_env import QuintupleInvertedPendulumEnv
