@@ -1,120 +1,143 @@
-# Multi Inverted Pendulum Control via Deep Reinforcement Learning
+# Multi Inverted Pendulum Control with Reinforcement Learning
 
 ## Overview
 
-This project addresses the control problem of a multi-link inverted pendulum system (3–5 links) using deep reinforcement learning.
-Unlike the classical single pendulum, the multi-link system exhibits highly nonlinear, coupled dynamics, making it significantly more challenging to stabilize.
+This project explores controlling multi-link inverted pendulum systems (3, 4, and 5 links) using reinforcement learning.
+As the number of links increases, the system becomes significantly more unstable due to nonlinear and coupled dynamics.
+The goal is to learn a policy that keeps all links balanced upright while controlling the cart position.
 
-The goal is to learn a control policy that keeps all pendulum links upright while maintaining the cart position within a stable range.
+---
+
+## Motivation
+
+The inverted pendulum is a classic control problem, but most implementations focus on single or double pendulums.
+This project extends the problem to multiple links, where traditional control methods become difficult to apply.
+
+By using reinforcement learning, the system can learn control strategies directly from interaction without requiring an explicit analytical solution.
 
 ---
 
 ## Environment
 
-A custom environment is implemented using Gymnasium.
+Custom environments are implemented using Gymnasium.
 
-### State Space
+Each environment includes:
 
-The system state consists of:
+* Continuous state space (position, angles, velocities)
+* Continuous action space (force applied to the cart)
+* Nonlinear dynamics solved numerically
+* Termination based on angle and position limits
 
-* Cart position and velocity
-* Angular positions and velocities of each pendulum link
+State representation (example for 3-link):
 
-Example (3-link system):
-x, θ₁, θ₂, θ₃, ẋ, θ̇₁, θ̇₂, θ̇₃
-
-### Action Space
-
-* Continuous force applied to the cart
-
-### Dynamics
-
-* Nonlinear system modeled using coupled equations of motion
-* Numerical solution via linear system solver
-* Time integration using Euler method
+x, θ₁, θ₂, θ₃, x_dot, θ₁_dot, θ₂_dot, θ₃_dot
 
 ---
 
-## Method
+## Methods
 
-We adopt Proximal Policy Optimization (PPO) for continuous control.
+Two reinforcement learning algorithms are used:
 
-* Framework: PyTorch
-* Library: Stable-Baselines3
-* Policy: MLP
+### PPO (Proximal Policy Optimization)
 
-### Training Strategy
+* Stable and widely used policy gradient method
+* Performs well on continuous control tasks
 
-* Reward shaping based on:
+### SAC (Soft Actor-Critic)
 
-  * Pendulum angle deviation
-  * Cart position error
-  * Velocity penalties
-* Early termination when instability thresholds are exceeded
+* Off-policy algorithm
+* Better exploration due to entropy maximization
+* Used for comparison
 
 ---
 
-## Implementation Details
+## Experiments
 
-Key components of the implementation include:
+We trained agents on three different environments:
 
-* Custom Gym environment for multi-link pendulum control 
-* Numerical stabilization in dynamics computation (matrix regularization)
-* Continuous control via PPO
-* Real-time visualization using Pygame
-* Video recording using MoviePy
+* Triple inverted pendulum (3 links)
+* Quadruple inverted pendulum (4 links)
+* Quintuple inverted pendulum (5 links)
+
+Training difficulty increases rapidly with the number of links.
 
 ---
 
 ## Results
 
-The trained agent is capable of:
+### Performance by Number of Links
 
-* Stabilizing multiple pendulum links simultaneously
-* Maintaining upright equilibrium under nonlinear dynamics
-* Generating smooth control signals
-
-
----
-
+| System | Difficulty | Stability         |
+| ------ | ---------- | ----------------- |
+| 3-link | Low        | Stable            |
+| 4-link | Medium     | Partially stable  |
+| 5-link | High       | Hard to stabilize |
 
 ---
 
-## Installation
+### PPO vs SAC
 
-```bash
+| Algorithm | Characteristics                        |
+| --------- | -------------------------------------- |
+| PPO       | More stable training                   |
+| SAC       | Better exploration but less consistent |
+
+In this project, PPO generally showed more reliable performance for multi-link control.
+
+---
+
+## Visualization
+
+### Simulation Result (3-link)
+
+![result](results/v1_triple/triple_pendulum_control.mp4)
+
+---
+
+## Project Structure
+
+```
+env/        # custom environments
+train/      # training scripts
+models/     # trained models
+logs/       # training logs
+results/    # simulation outputs
+```
+
+---
+
+## How to Run
+
+Install dependencies:
+
 pip install gymnasium stable-baselines3 torch pygame moviepy
-```
+
+Run training:
+
+python train/train_triple.py
+python train/train_quadruple.py
+python train/train_quintuple.py
 
 ---
 
-## Usage
+## Key Points
 
-### Train the agent
-
-```bash
-python train.py
-```
-
-### Run simulation
-
-The script automatically:
-
-* trains the model (if not available)
-* runs evaluation
-* saves a video of the result
+* Custom multi-link physics environments
+* Reinforcement learning-based control
+* Comparison across different system complexities
+* PPO vs SAC comparison
 
 ---
 
 ## Future Work
 
-* Extension to 5-link inverted pendulum
-* Comparison with SAC / TD3
-* Integration with classical control (LQR)
-* Improved physics modeling and numerical integration
+* Improve stability for 5-link system
+* Compare with classical control methods (LQR)
+* Add performance metrics and plots
+* Optimize reward design
 
 ---
 
-## Keywords
+## Author
 
-Reinforcement Learning, PPO, Control Systems, Nonlinear Dynamics, Inverted Pendulum
+AI undergraduate student focusing on reinforcement learning and control systems.
